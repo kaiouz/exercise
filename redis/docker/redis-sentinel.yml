@@ -1,0 +1,29 @@
+version: "3.9"
+networks:
+  default:
+    external:
+      name: global
+
+services:
+  redis1:
+    image: redis
+    container_name: redis1
+    ports:
+      - "6379:6379"
+    command: redis-server --replica-announce-ip ${IP} --replica-announce-port 6379
+
+  redis2:
+    image: redis
+    container_name: redis2
+    ports:
+      - "6380:6379"
+    command: redis-server --replicaof redis1 6379 --replica-announce-ip ${IP} --replica-announce-port 6380
+
+  sentinel1:
+    image: redis
+    container_name: sentinel1
+    ports:
+      - "26379:6379"
+    volumes:
+      - ./:/usr/local/etc/redis
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf

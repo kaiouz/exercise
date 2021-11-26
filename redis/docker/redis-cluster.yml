@@ -1,0 +1,36 @@
+version: "3.9"
+networks:
+  default:
+    external:
+      name: global
+
+services:
+  redis1:
+    image: redis
+    container_name: redis1
+    ports:
+      - "7001:7001"
+      - "17001:17001"
+    volumes:
+      - ./:/usr/local/etc/redis
+    command: redis-server /usr/local/etc/redis/cluster1.conf --cluster-announce-ip ${IP}
+
+  redis2:
+    image: redis
+    container_name: redis2
+    ports:
+      - "7002:7002"
+      - "17002:17002"
+    volumes:
+      - ./:/usr/local/etc/redis
+    command: redis-server /usr/local/etc/redis/cluster2.conf --cluster-announce-ip ${IP}
+
+  redis3:
+    image: redis
+    container_name: redis3
+    ports:
+      - "7003:7003"
+      - "17003:17003"
+    volumes:
+      - ./:/usr/local/etc/redis
+    command: redis-server /usr/local/etc/redis/cluster3.conf --cluster-announce-ip ${IP}
